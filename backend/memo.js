@@ -7,8 +7,7 @@ const MemoSchema = new Schema(
     {
     id: Number,
     message: String,
-    password: String,
-    date: ISODate(timestamps)
+    password: String
     },
     {timestamps: true}
 );
