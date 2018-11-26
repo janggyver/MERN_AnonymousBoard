@@ -15,7 +15,7 @@ class App extends Component {
   };
 
   // when component mounts, first thing it does is fetch all existing data in our db
-  // then we incorporate a polling logic so that we can easily see if our db has
+  // then we incorporate a polling logic so that we can easily see if our db has 
   // changed and implement those changes into our UI
   componentDidMount() {
     this.getDataFromDb();
@@ -25,7 +25,7 @@ class App extends Component {
     }
   }
 
-  // never let a process live forever
+  // never let a process live forever 
   // always kill a process everytime we are done using it
   componentWillUnmount() {
     if (this.state.intervalIsSet) {
@@ -107,7 +107,8 @@ class App extends Component {
           {data.length <= 0
             ? "NO DB ENTRIES YET"
             : data.map(dat => (
-                <li style={{ padding: "10px" }} key={data.message}>
+                <li style={{ padding: "10px" }} key={data.id}>
+                  <span style={{ color: "gray" }}> OID: </span> {dat._id} <br />
                   <span style={{ color: "gray" }}> Date: </span> {dat.updatedAt} <br />
                   <span style={{ color: "gray" }}> id: </span> {dat.id} <br />
                   <span style={{ color: "gray" }}> Message: </span> {dat.message}<br />
