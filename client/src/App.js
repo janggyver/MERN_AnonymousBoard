@@ -1,5 +1,39 @@
 import React, { Component } from "react";
 import axios from "axios";
+import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+ import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
+
+// const styles = {
+//   textInput: {
+//     marginRight: '10px',
+//     color: "blue",
+//     // #F3C677
+//   },
+//   textInputInput: {
+//     color: "red",
+//     // #F3C677
+//   },
+// };
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+  dense: {
+    marginTop: 16,
+  },
+  menu: {
+    width: 200,
+  },
+});
+
 
 class App extends Component {
   // initialize our state
@@ -18,7 +52,7 @@ class App extends Component {
   // then we incorporate a polling logic so that we can easily see if our db has 
   // changed and implement those changes into our UI
   componentDidMount() {
-    this.getDataFromDb();
+    //this.getDataFromDb();
     if (!this.state.intervalIsSet) {
       let interval = setInterval(this.getDataFromDb, 1000);
       this.setState({ intervalIsSet: interval });
@@ -100,6 +134,7 @@ class App extends Component {
   // it is easy to understand their functions when you
   // see them render into our screen
   render() {
+    const { classes } = this.props;
     const { data } = this.state;
     return (
       <div>
@@ -111,25 +146,69 @@ class App extends Component {
                   <span style={{ color: "gray" }}> OID: </span> {dat._id} <br />
                   <span style={{ color: "gray" }}> Date: </span> {dat.updatedAt} <br />
                   <span style={{ color: "gray" }}> id: </span> {dat.id} <br />
-                  <span style={{ color: "gray" }}> Message: </span> {dat.message}<br />
+                  <span style={{ color: "gray" }}> Message: </span> {dat.message.split("\n")
+                  .map((item, i) => {return <p key={i}>{item}</p>})}<br />
                   <span style={{ color: "gray" }}> Password: </span> {dat.password} <br />
                   
                 </li>
               ))}
         </ul>
         <div style={{ padding: "10px" }}>
-          <input
+          {/* <input
             type="text"
             onChange={e => this.setState({ message: e.target.value })}
             placeholder="add something in the database"
             style={{ width: "200px" }}
+          /> */}
+
+          {/*@material-ui  multiline */}
+
+          <TextField
+            id="filled-with-placeholder"
+            label="Input password"
+            placeholder="Placeholder"
+            className={classes.textField}
+            helperText="Required when delete"
+            margin="normal"
+            variant="filled"
+            onChange={e => this.setState({ password: e.target.value })}
           />
-          <input
+          <TextField
+            id="filled-textarea"
+            label="Write what you want"
+            placeholder="You can write multiline"
+            multiline={true}
+            className={classes.textField}
+            margin="normal"
+            variant="filled"
+            style = {{width: 800}}
+            onChange={(e)=>this.setState({message: e.target.value })}
+          />
+          <div class="mdc-text-field mdc-text-field--textarea">
+            <textarea id="textarea" class="mdc-text-field__input" rows="8" cols="40"
+              onChange={(e)=>this.setState({message: e.target.value })}
+            ></textarea><br/>
+            <label for="textarea" class="mdc-floating-label">Wrtie everything that you want to say!</label>
+          </div>
+
+          {/* <input
             type="text"
             style={{ width: "200px" }}
+            multiline={true} 
+            numberOfLines={10}
             onChange={e => this.setState({ password: e.target.value })}
             placeholder="put new password"
-          />
+          /> */}
+
+          {/* <TextField
+            rows={2}
+            hintText="notes"
+            multiLine={true}
+            style={styles.textInput}
+            textareaStyle={styles.textInputInput}
+            onChange={(e)=>this.setState({message: e.target.value })}
+            // rows={2}
+             /> */}
           <button onClick={() => this.putDataToDB(this.state.message, this.state.password)}>
             ADD
           </button>
@@ -171,4 +250,8 @@ class App extends Component {
   }
 }
 
-export default App;
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles) (App);
